@@ -46,7 +46,8 @@ arr = arr
     ({ d, c }) => (c == 'vert' && d == 'café') || (c != 'vert' && d != 'café')
   )
   .filter(
-    ({ s, p }) => (s == 'pal' && p == 'oiseau') || (s != 'pal' && p != 'oiseau')
+    ({ s, p }) =>
+      (s == 'pall' && p == 'oiseau') || (s != 'pall' && p != 'oiseau')
   )
   .filter(({ d, po }) => (d == 'lait' && po == 3) || (d != 'lait' && po != 3))
   .filter(
@@ -113,7 +114,16 @@ const isValid = arr =>
   [...new Set(arr.map(({ po }) => po))].length === 4 &&
   [...new Set(arr.map(({ n }) => n))].length === 4
 
-guess = guess.filter(isValid)
+const malboChat = arr => {
+  const cat = arr.find(({ p }) => p == 'chat') ?? { po: 1 }
+  const malbo = arr.find(({ s }) => s == 'malbo') ?? { po: 1 }
 
-console.log(guess)
-console.log(guess.length)
+  return Math.abs(cat.po - malbo.po) == 1
+}
+
+guess = guess
+  .filter(isValid)
+  .filter(arr => arr[0].p == 'cheval')
+  .filter(malboChat)
+
+console.log('Result :', guess[0].find(({ p }) => p == 'poisson'))
